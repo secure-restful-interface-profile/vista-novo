@@ -1,3 +1,6 @@
+// Allow self-signed certificates
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 // create express object to be returned
 var express  = require('express');
 var provider = require('./mongoose.js');
