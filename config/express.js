@@ -49,12 +49,11 @@ app.get('/', function(req, res){
 app.get('/:model', function(req,res){
   var controller = require('../app/controllers/' + req.params.model);
   controller.list(req,res);
-   
-    
 });
 
 //show latest model
 app.get('/:model/@:id', function(req,res){
+  console.log("===== Entering :model show =====");
   var controller = require('../app/controllers/' + req.params.model);
   controller.load(req,res,req.params.id,null, function(obj) {
     if(obj.constructor.name=="Error")
@@ -62,6 +61,7 @@ app.get('/:model/@:id', function(req,res){
       console.log("Got an error: " + obj);
       res.send(500);
     } else {
+      console.log("----- Calling controller ------")
       controller.show(req,res);
     }
   });
