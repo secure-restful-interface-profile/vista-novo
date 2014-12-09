@@ -4,7 +4,8 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 // create express object to be returned
 var express  = require('express');
 var provider = require('./mongoose.js');
-var cons      = require('consolidate');
+var cons     = require('consolidate');
+var util     = require('util');
 
 // create app object and setup as exported member of module
 var app = express();
@@ -50,13 +51,16 @@ app.get('/', function(req, res){
 
 //index for model(not necessary)
 app.get('/:model', function(req,res){
+  console.log("===== Entering GET /:model =====");
   var controller = require('../app/controllers/' + req.params.model);
+  console.log("----- Calling controller ------")
   controller.list(req,res);
+  // console.log("----- res = " + util.inspect(res) + " -----");
 });
 
 //show latest model
 app.get('/:model/@:id', function(req,res){
-  console.log("===== Entering :model show =====");
+  console.log("===== Entering GET /:model/@:id =====");
   var controller = require('../app/controllers/' + req.params.model);
   controller.load(req,res,req.params.id,null, function(obj) {
     if(obj.constructor.name=="Error")
@@ -68,10 +72,12 @@ app.get('/:model/@:id', function(req,res){
       controller.show(req,res);
     }
   });
+  // console.log("----- res = " + util.inspect(res) + " -----");
 });
 
 //show for model
 app.get('/:model/@:id/history/@:vid', function(req,res){
+  console.log("===== Entering GET /:model/@:id/history/@:vid =====");
   var controller = require('../app/controllers/' + req.params.model);
   controller.load(req,res,req.params.id,req.params.vid, function(obj) {
     if(obj.constructor.name=="Error")
@@ -79,9 +85,11 @@ app.get('/:model/@:id/history/@:vid', function(req,res){
       console.log("Got an error: " + obj);
       res.send(500);
     } else {
+      console.log("----- Calling controller ------")
       controller.show(req,res);
     }
   });
+  // console.log("----- res = " + util.inspect(res) + " -----");
 });
 
 //create for model
